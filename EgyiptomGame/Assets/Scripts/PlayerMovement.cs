@@ -29,10 +29,24 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float climbSpeed=7f;
    
 
-   
+   public Transform ledgeCheck;
+   public Transform wallCheck;
+   bool isTouchingLedge;
+   bool isTouchingWall;
+   bool canClimbLedge;
+   bool ledgeDetected;
+    bool isFacingRight;
 
+    Vector2 ledgePosBot;
+    Vector2 ledgePos1;
+    Vector2 ledgePos2; 
 
-   
+    [SerializeField] float wallCheckDistance;
+    [SerializeField] float ledgeClimbXOffset1=0f;
+    [SerializeField] float ledgeClimbYOffset1=0f;
+    [SerializeField] float ledgeClimbXOffset2=0f;
+    [SerializeField] float ledgeClimbYOffset2=0f;
+
     void Start()
     {
         myRigidbody=GetComponent<Rigidbody2D>();
@@ -50,11 +64,12 @@ public class PlayerMovement : MonoBehaviour
         }
         
         
-       
+       FacingRight();
         Run();
         ClimbWall();
 
-       
+        CheckSurroundings();
+        CheckLedgeClimb();
             GroundCheck();
         
         
@@ -62,6 +77,16 @@ public class PlayerMovement : MonoBehaviour
        
        myAnimator.SetFloat("yVelocity",myRigidbody.velocity.y);
         
+    }
+
+    void FacingRight(){
+        if(transform.localScale.x>0){
+            isFacingRight=true;
+            
+        }else{
+            isFacingRight=false;
+            
+        }
     }
 
     void OnMove(InputValue value)
@@ -203,6 +228,49 @@ public class PlayerMovement : MonoBehaviour
         myAnimator.SetBool("IsJumping",!isGrounded);
 
         }
+    }
+
+        void CheckLedgeClimb(){
+            if(ledgeDetected && !canClimbLedge){
+                canClimbLedge=true;
+
+                if(isFacingRight){
+                    ledgePos1=new Vector2(Mathf.Floor(ledgePosBot.x+wallCheckDistance)-ledgeClimbXOffset1,Mathf.Floor(ledgePosBot.y)+ledgeClimbYOffset1);
+                  ledgePos2=new Vector2(Mathf.Floor(ledgePosBot.x+wallCheckDistance)+ledgeClimbXOffset2,Mathf.Floor(ledgePosBot.y)+ledgeClimbYOffset2);
+                }else{
+                    ledgePos1=new Vector2(Mathf.Ceil(ledgePosBot.x-wallCheckDistance)+ledgeClimbXOffset1,Mathf.Floor(ledgePosBot.y)+ledgeClimbYOffset1);
+                  ledgePos2=new Vector2(Mathf.Ceil(ledgePosBot.x-wallCheckDistance)-ledgeClimbXOffset2,Mathf.Floor(ledgePosBot.y)+ledgeClimbYOffset2);
+                }
+                isDashing=true;
+
+                myAnimator.SetBool("canClimbLedge",canClimbLedge);
+            }
+            
+            if(canClimbLedge){
+                transform.position=ledgePos1;
+                myRigidbody.velocity=new Vector2(0f,0f);
+                myRigidbody.gravityScale=0f; //mivel wallclimbe be van rakva ha nem érjük a falat a gravitáció alap lesz ezért ezt nem kell vissza csinélni
+            }
+        }
+
+        public void FinnishLedgeCLimb(){
+            canClimbLedge=false;
+            transform.position=ledgePos2;
+            isDashing=false;
+            ledgeDetected=false;
+             myAnimator.SetBool("canClimbLedge",canClimbLedge);
+        }
+
+        
+        void CheckSurroundings(){
+            isTouchingLedge=Physics2D.Raycast(ledgeCheck.position,transform.right,wallCheckDistance,GroundLayer);
+           isTouchingWall=Physics2D.Raycast(wallCheck.position,transform.right,wallCheckDistance,GroundLayer);
+
+            if(isTouchingWall && !isTouchingLedge && !ledgeDetected){
+                ledgeDetected=true;
+                ledgePosBot=wallCheck.position;
+            }
+
         }
 
         
