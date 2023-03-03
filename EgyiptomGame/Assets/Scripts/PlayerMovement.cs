@@ -263,8 +263,14 @@ public class PlayerMovement : MonoBehaviour
 
         
         void CheckSurroundings(){
-            isTouchingLedge=Physics2D.Raycast(ledgeCheck.position,transform.right,wallCheckDistance,GroundLayer);
+            if(isFacingRight){
+                 isTouchingLedge=Physics2D.Raycast(ledgeCheck.position,transform.right,wallCheckDistance,GroundLayer);
            isTouchingWall=Physics2D.Raycast(wallCheck.position,transform.right,wallCheckDistance,GroundLayer);
+            }else if(!isFacingRight){
+                  isTouchingLedge=Physics2D.Raycast(ledgeCheck.position,-transform.right,wallCheckDistance,GroundLayer);
+           isTouchingWall=Physics2D.Raycast(wallCheck.position,-transform.right,wallCheckDistance,GroundLayer);
+            }
+           
 
             if(isTouchingWall && !isTouchingLedge && !ledgeDetected){
                 ledgeDetected=true;

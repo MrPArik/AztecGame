@@ -1327,7 +1327,7 @@ MonoBehaviour:
   ledgeClimbXOffset1: 0.3
   ledgeClimbYOffset1: 0
   ledgeClimbXOffset2: 0.5
-  ledgeClimbYOffset2: 2
+  ledgeClimbYOffset2: 1
 --- !u!114 &1420731272
 MonoBehaviour:
   m_ObjectHideFlags: 0

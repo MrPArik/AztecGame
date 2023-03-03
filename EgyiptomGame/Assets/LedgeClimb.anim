@@ -30,7 +30,7 @@ AnimationClip:
     - time: 0.4
       value: {fileID: -1103337112, guid: f80f5b9976fdbc943817c79909da23ac, type: 3}
     - time: 0.5
-      value: {fileID: 888991909, guid: f80f5b9976fdbc943817c79909da23ac, type: 3}
+      value: {fileID: -1861354151, guid: f80f5b9976fdbc943817c79909da23ac, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -55,7 +55,7 @@ AnimationClip:
     - {fileID: 140476126, guid: f80f5b9976fdbc943817c79909da23ac, type: 3}
     - {fileID: -1064564968, guid: f80f5b9976fdbc943817c79909da23ac, type: 3}
     - {fileID: -1103337112, guid: f80f5b9976fdbc943817c79909da23ac, type: 3}
-    - {fileID: 888991909, guid: f80f5b9976fdbc943817c79909da23ac, type: 3}
+    - {fileID: -1861354151, guid: f80f5b9976fdbc943817c79909da23ac, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
@@ -81,7 +81,7 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events:
-  - time: 0.5
+  - time: 0.4
     functionName: FinnishLedgeCLimb
     data: 
     objectReferenceParameter: {fileID: 0}
