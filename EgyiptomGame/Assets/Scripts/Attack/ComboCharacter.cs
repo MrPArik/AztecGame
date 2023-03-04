@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class ComboCharacter : MonoBehaviour
 {
-  private StateMachine meleeStateMachine;
+
+    private StateMachine meleeStateMachine;
 
     [SerializeField] public Collider2D hitbox;
     [SerializeField] public GameObject Hiteffect;

@@ -1,11 +1,7 @@
-
 using UnityEngine;
 
-public abstract class State 
-
-
+public abstract class State
 {
-
     protected float time { get; set; }
     protected float fixedtime { get; set; }
     protected float latetime { get; set; }
