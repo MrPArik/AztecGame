@@ -8,7 +8,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float RunSpeed=7f;
     [SerializeField] float JumpSpeed=7f;
     const float groundCheckRadius=0.3f;
-     [SerializeField] bool isGrounded=false;
+     public bool isGrounded=false;
     [SerializeField] LayerMask GroundLayer;
     Vector2 moveInput;
     Rigidbody2D myRigidbody;
@@ -16,6 +16,7 @@ public class PlayerMovement : MonoBehaviour
     BoxCollider2D myFeetCollider;
     Animator myAnimator;
     [SerializeField] Transform groundCheckCollider;
+    [SerializeField] bool isAlive=true;
 
     
 
@@ -47,6 +48,9 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float ledgeClimbXOffset2=0f;
     [SerializeField] float ledgeClimbYOffset2=0f;
 
+
+    public bool CsapdaSebzes=false;
+
     void Start()
     {
         myRigidbody=GetComponent<Rigidbody2D>();
@@ -59,7 +63,9 @@ public class PlayerMovement : MonoBehaviour
   
     void Update()
     {
-       if(isDashing==true){
+        if(isAlive){
+
+            if(isDashing==true){
             return; //ha épp dashelünk akkor semmi mást se tudunk csinálni
         }
         
@@ -70,14 +76,28 @@ public class PlayerMovement : MonoBehaviour
 
         CheckSurroundings();
         CheckLedgeClimb();
+        if(CsapdaSebzes==false)
+        {
             GroundCheck();
+        }else{
+            myAnimator.SetBool("IsJumping",false);
+        }
+            
         
         
         FlipSprite();
        
        myAnimator.SetFloat("yVelocity",myRigidbody.velocity.y);
+
+        }
+           
+            
+                        
+            
+        }
+       
         
-    }
+    
 
     void FacingRight(){
         if(transform.localScale.x>0){
@@ -117,7 +137,8 @@ public class PlayerMovement : MonoBehaviour
     }
 
     void OnJump(InputValue value){
-        if( myFeetCollider.IsTouchingLayers(LayerMask.GetMask("Talaj")))//vagy if(isGrounded==true)
+        if(isAlive){
+            if( myFeetCollider.IsTouchingLayers(LayerMask.GetMask("Talaj")))//vagy if(isGrounded==true)
         {  
 
         if(value.isPressed){
@@ -126,6 +147,8 @@ public class PlayerMovement : MonoBehaviour
            
         }
         }
+        }
+        
     }
 
     void OnRoll(InputValue value){
@@ -279,9 +302,30 @@ public class PlayerMovement : MonoBehaviour
 
         }
 
+        public void CsapdaSebzesMethod(){
+            CsapdaSebzes=true;
+        }
+         public void NincsCsapdaSebzesMethod(){
+            CsapdaSebzes=false;
+        }
+
+        public void Death(){
+            isAlive=false;
+            myAnimator.SetBool("IsRunning",false);
+            myAnimator.SetBool("IsJumping",false);
+            myAnimator.SetBool("IsDead",true);
+            myRigidbody.velocity=new Vector2(0f,-6f);
+            
+             if(myFeetCollider.IsTouchingLayers(LayerMask.GetMask("Talaj"))){
+                myRigidbody.velocity=new Vector2(0f,0f);
+                myRigidbody.gravityScale=0f;
+                myCapsuleCollider.enabled=false;
+                this.enabled=false;
+
+            }
         
         
     }
-
+}
 
 
