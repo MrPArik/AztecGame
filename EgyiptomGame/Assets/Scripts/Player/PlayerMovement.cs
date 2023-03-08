@@ -50,6 +50,7 @@ public class PlayerMovement : MonoBehaviour
 
 
     public bool CsapdaSebzes=false;
+    [SerializeField]  bool isAttacking=false;
 
     void Start()
     {
@@ -67,6 +68,9 @@ public class PlayerMovement : MonoBehaviour
 
             if(isDashing==true){
             return; //ha épp dashelünk akkor semmi mást se tudunk csinálni
+        }
+        if(isAttacking==true){
+            return;
         }
         
         
@@ -325,6 +329,16 @@ public class PlayerMovement : MonoBehaviour
             }
         
         
+    }
+
+    public void Attacking(){
+        isAttacking=true;
+        myRigidbody.velocity=new Vector2(0f,0f);
+        myAnimator.SetBool("IsRunning",false);
+    }
+
+    public void NotAttacking(){
+        isAttacking=false;
     }
 }
 
