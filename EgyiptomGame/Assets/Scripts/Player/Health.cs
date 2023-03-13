@@ -57,6 +57,14 @@ public class Health : MonoBehaviour
         
     }
 
+    public void GetDamage(int damage){
+        if(isAlive==true){
+                CurrentHealth=CurrentHealth-damage;
+        myAnimator.SetTrigger("IsHurt");
+        }
+        
+    }
+
     void Die(){
             isAlive=false;
             playerMovement.Death();

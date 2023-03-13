@@ -7,10 +7,12 @@ public class HotZoneCheck : MonoBehaviour
     private EnemyAttack enemyAttack;
     bool inRange;
     Animator anim;
+   
     
     private void Awake() {
         enemyAttack=GetComponentInParent<EnemyAttack>();
         anim=GetComponentInParent<Animator>();
+
     }
 
      void Update() {
@@ -20,7 +22,7 @@ public class HotZoneCheck : MonoBehaviour
     }
 
      void OnTriggerEnter2D(Collider2D other) {
-        if(other.gameObject.CompareTag("Player")){
+        if(other.gameObject.CompareTag("Player") ){
             inRange=true;
         }
     }

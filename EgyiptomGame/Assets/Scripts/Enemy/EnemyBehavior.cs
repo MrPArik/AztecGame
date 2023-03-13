@@ -8,17 +8,31 @@ public class EnemyBehavior : MonoBehaviour
 {
     [SerializeField] int EnemyCurrentHealth=0;
     [SerializeField] int EnemyMaxHealth=100;
-    Animator EnemyAnimator;
+     [SerializeField] Animator EnemyAnimator;
+     EnemyAttack enemyAttack;
 
 private void Start() {
     EnemyCurrentHealth=EnemyMaxHealth;
+    enemyAttack=GetComponentInParent<EnemyAttack>();
     
-    EnemyAnimator=GetComponent<Animator>();
+    //EnemyAnimator=GetComponent<Animator>();
+}
+private void Update() {
+    if(EnemyCurrentHealth<=0){
+        SkeletonDead();
+    }
 }
 
 
     public void EnemyGetHit(int damage){
+            if(enemyAttack.SkeletonIsAlive==true){
         EnemyAnimator.SetTrigger("IsHit");
-        EnemyCurrentHealth=EnemyCurrentHealth-damage;
+        EnemyCurrentHealth-=damage;
+            }
+        
+    }
+
+    void SkeletonDead(){
+        enemyAttack.SkeletonDied();
     }
 }

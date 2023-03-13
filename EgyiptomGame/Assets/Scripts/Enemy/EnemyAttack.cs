@@ -23,6 +23,8 @@ public class EnemyAttack : MonoBehaviour
      public bool inRange; //Check if Player is in range
     public GameObject HotZone;
     public GameObject triggerArea;
+    public bool SkeletonIsAlive=true;
+   
     #endregion
 
     #region Private Variables
@@ -35,26 +37,41 @@ public class EnemyAttack : MonoBehaviour
     private bool cooling; //Check if Enemy is cooling after attack
     private float intTimer;
     #endregion
+    
+    PlayerMovement playerMovement;
 
     void Awake()
     {
         SelectTarget();
         intTimer = timer; //Store the inital value of timer
         anim = GetComponent<Animator>();
+        playerMovement=FindObjectOfType<PlayerMovement>();
+        
     }
 
     void Update()
     {
-        if (!attackMode)
+
+        if(SkeletonIsAlive==true){
+
+                if (!attackMode)
         {
             Move();
         }
 
-        if (!InsideOfLimits() && !inRange && !anim.GetCurrentAnimatorStateInfo(0).IsName("Enemy_attack"))
+        if (!InsideOfLimits() && !inRange && !anim.GetCurrentAnimatorStateInfo(0).IsName("SkeletonAttack"))
         {
             SelectTarget();
         }
 
+        if(playerMovement.isAlive==false){
+            //HotZone.SetActive(false);
+           // triggerArea.SetActive(false);
+            //inRange=false;
+            StopAttack();
+            inRange=false;
+            //SelectTarget();
+        }
        
         
 
@@ -62,6 +79,10 @@ public class EnemyAttack : MonoBehaviour
         {
             EnemyLogic();
         }
+
+        }
+        
+        
     }
 
     
@@ -70,7 +91,7 @@ public class EnemyAttack : MonoBehaviour
     {
         distance = Vector2.Distance(transform.position, target.position);
 
-        if (distance > attackDistance)
+        if (distance > attackDistance && !anim.GetCurrentAnimatorStateInfo(0).IsName("SkeletonAttack"))
         {
             StopAttack();
         }
@@ -120,7 +141,9 @@ public class EnemyAttack : MonoBehaviour
 
     void StopAttack()
     {
+        
         cooling = false;
+        
         attackMode = false;
         anim.SetBool("CanAttack", false);
     }
@@ -159,20 +182,31 @@ public class EnemyAttack : MonoBehaviour
 
     public void Flip()
     {
-        Vector3 rotation = transform.eulerAngles;
-        if (transform.position.x > target.position.x) 
-        {
-            rotation.y = 180;
-        }
-        else
-        {
-            Debug.Log("Twist");
-            rotation.y = 0;
-        }
+        if(SkeletonIsAlive==true){
+                Vector3 rotation = transform.eulerAngles;
+         if (transform.position.x > target.position.x) 
+            {
+               rotation.y = 180;
+         }
+         else
+         {
+             Debug.Log("Twist");
+             rotation.y = 0;
+            }
 
         //Ternary Operator
         //rotation.y = (currentTarget.position.x < transform.position.x) ? rotation.y = 180f : rotation.y = 0f;
 
-        transform.eulerAngles = rotation;
+            transform.eulerAngles = rotation;
+        }
+        
     }
+
+    public void SkeletonDied(){
+        SkeletonIsAlive=false;
+        StopAttack();
+        anim.SetBool("IsDead",true);
+    }
+
+
 }

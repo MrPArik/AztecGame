@@ -13,15 +13,15 @@ public class PlayerMovement : MonoBehaviour
     Vector2 moveInput;
     Rigidbody2D myRigidbody;
     CapsuleCollider2D myCapsuleCollider;
-    BoxCollider2D myFeetCollider;
+     [SerializeField] BoxCollider2D myFeetCollider;
     Animator myAnimator;
     [SerializeField] Transform groundCheckCollider;
-    [SerializeField] bool isAlive=true;
+    public bool isAlive=true;
 
     
 
     bool canDash=true;  //mehet-e a dash
-    bool isDashing=false;	//most megy-e a dash
+    public bool isDashing=false;	//most megy-e a dash
     float dashingPower=12f; //mekkroa távot teszl vele
     float dashingTime=0.2f; //meddig tart
     float dashingColdown=1f; 
@@ -57,7 +57,7 @@ public class PlayerMovement : MonoBehaviour
         myRigidbody=GetComponent<Rigidbody2D>();
          myAnimator=GetComponent<Animator>();
          myCapsuleCollider=GetComponent<CapsuleCollider2D>();
-         myFeetCollider=GetComponent<BoxCollider2D>();
+         
          GravityAtStart=myRigidbody.gravityScale;
     }
 
@@ -183,9 +183,13 @@ public class PlayerMovement : MonoBehaviour
         yield return new WaitForSeconds(dashingTime);
         
         myRigidbody.gravityScale = originalGravity;
+        myRigidbody.velocity=new Vector2(0f, 0f);
         isDashing = false;
         yield return new WaitForSeconds(dashingColdown);
         canDash = true;
+        if(isAlive==false){
+                Death();
+        }
     }
 
     void ClimbWall(){
@@ -317,6 +321,7 @@ public class PlayerMovement : MonoBehaviour
             isAlive=false;
             myAnimator.SetBool("IsRunning",false);
             myAnimator.SetBool("IsJumping",false);
+            
             myAnimator.SetBool("IsDead",true);
             myRigidbody.velocity=new Vector2(0f,-6f);
             

@@ -10,13 +10,14 @@ public class Attack : MonoBehaviour
     public bool isAttacking=false;
     public static Attack instance;
     [SerializeField] PlayerMovement playerMovement;
+    [SerializeField] int AttackDamage =20;
     
     
     
     public Transform attackPoint;
     public float attackRange=0.5f;
     public LayerMask enemyLayers; //ide az enemy layert kell kiválasztani
-    int attackDamage=20;
+    
 
     [SerializeField]  float AttackRate=2f; //hányszor üthetünk egy másodperc alatt
     float nextAttackTime=0f; 
@@ -63,8 +64,7 @@ public class Attack : MonoBehaviour
  //ez csinél egy kört az attack point körül a surát az attackRange és amilyen layerek benne vannak ebbe azokat megjegyzi és a hitEnemies colliderbe menti el öket.
         foreach(Collider2D enemy in hitEnemis)
         {
-           enemy.GetComponent<EnemyBehavior>().EnemyGetHit(attackDamage);
-           Debug.Log("talat");
+           enemy.GetComponent<EnemyBehavior>().EnemyGetHit(AttackDamage);
         }
 
 
